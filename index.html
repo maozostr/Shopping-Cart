@@ -1,0 +1,479 @@
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="description" content="">
+   <meta name="generator" content="Hugo 0.104.2">
+   <title>Shopping Cart</title>
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+   <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"></script>
+   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+      integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+      crossorigin="anonymous"></script>
+   <script defer src="script.js" type="module"></script>
+
+   <!-- <link rel="stylesheet" href="style.css"> -->
+   <style>
+      ul,
+      div,
+      span,
+      button,
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="number"],
+      select,
+      textarea,
+      img {
+         border-radius: 3px !important;
+      }
+
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+      ::-webkit-scrollbar {
+         width: 5px;
+         height: 5px;
+      }
+
+      ::-webkit-scrollbar-track {
+         background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+         background: #888;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+         background: #555;
+      }
+
+      .cart_item {
+         border-bottom-color: rgb(100, 104, 123);
+         border-radius: 0 !important;
+         border-top: none;
+         border-right: none;
+         border-left: none;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+      }
+
+      .cart_item:last-child {
+         border: none;
+      }
+
+      .modal_product {
+         border: none;
+      }
+
+      .card-img-top {
+         width: 100%;
+         height: 300px;
+         object-fit: cover;
+         cursor: pointer;
+         transition: 1s ease-in-out;
+      }
+
+      .card-img-top:hover {
+         transform: scale(0.98);
+      }
+
+      .red_color {
+         color: crimson;
+      }
+
+      .hide {
+         display: none;
+      }
+
+      .bd-placeholder-img {
+         font-size: 1.125rem;
+         text-anchor: middle;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         user-select: none;
+      }
+
+      @media (min-width: 768px) {
+         .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+         }
+      }
+
+      .b-example-divider {
+         height: 3rem;
+         background-color: rgba(0, 0, 0, .1);
+         border: solid rgba(0, 0, 0, .15);
+         border-width: 1px 0;
+         box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+         flex-shrink: 0;
+         width: 1.5rem;
+         height: 100vh;
+      }
+
+      .bi {
+         vertical-align: -.125em;
+         fill: currentColor;
+      }
+
+      .nav-scroller {
+         position: relative;
+         z-index: 2;
+         height: 2.75rem;
+         overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+         display: flex;
+         flex-wrap: nowrap;
+         padding-bottom: 1rem;
+         margin-top: -1px;
+         overflow-x: auto;
+         text-align: center;
+         white-space: nowrap;
+         -webkit-overflow-scrolling: touch;
+      }
+
+   </style>
+
+
+</head>
+
+<body>
+
+
+
+
+
+   <header class="bg-dark p-2">
+      <div class="collapse bg-dark" id="navbarHeader">
+         <div class="container">
+            <div class="list-group w-auto cart_list"></div>
+         </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+         <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                  class="me-2 bi bi-card-checklist" viewBox="0 0 16 16">
+                  <path
+                     d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                  <path
+                     d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
+               </svg>
+               <strong>Products</strong>
+            </a>
+
+            <div class="d-flex gap-3 align-items-center">
+               <span class="cart_total_price text-white">
+                  Total: $0
+               </span>
+               <button
+
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop1"
+                  class="btn btn-success checkout_btn hide">
+                  Checkout
+               </button>
+               <button type="button" class="btn btn-secondary position-relative btn-sm"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarHeader">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart3"
+                     viewBox="0 0 16 16">
+                     <path
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                  </svg>
+                  <span
+                     class="cart_items_count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                     0
+                     <span class="visually-hidden">unread messages</span>
+                  </span>
+               </button>
+            </div>
+
+         </div>
+      </div>
+   </header>
+
+   <main>
+      <div class="album py-5 bg-light">
+         <div class="container">
+            <div class="alert alert-success hide" role="alert">
+               <h5 class="alert-heading d-flex justify-content-between align-items-center">
+                  <span>Well Done!</span>
+                  <button type="button" class="btn-close close_success_alert_btn"
+                     aria-label="Close"></button>
+               </h5>
+               <p class="shipping_info"></p>
+               <hr>
+               <p class="mb-0">Thank you for buy our shop</p>
+
+
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 products_list"></div>
+         </div>
+      </div>
+   </main>
+
+   <footer class="text-muted py-5">
+
+      <div class="container">
+         <p class="float-end mb-1">
+            <a href="#">
+               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                  class="bi bi-arrow-up-square-fill" viewBox="0 0 16 16">
+                  <path
+                     d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
+               </svg>
+            </a>
+         </p>
+         <p class="mb-1"></p>
+         <p class="mb-0">Code <a href="/">Github LInk</a> </p>
+      </div>
+   </footer>
+
+
+
+
+
+   <div class="modal fade" id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog modal-dialog-scrollable modal-lg">
+         <div class="modal-content ">
+            <div class="modal-header modal_header_product">
+               <h1 class="modal-title modal_title_product fs-5" id="staticBackdropLabel"></h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal_body_product">
+
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+
+
+
+
+
+   <div class="modal fade checkout_modal" id="staticBackdrop1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog modal-dialog-scrollable modal-xl">
+         <div class="modal-content ">
+            <div class="modal-header">
+               <h1 class="modal-title fs-5" id="staticBackdropLabel">Checkout</h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+               <div class="row g-3">
+                  <div class="col-md-5 col-lg-4 order-md-last">
+                     <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-info">Your cart</span>
+                        <span class="badge bg-info rounded-pill checkout_cart_items_count">3</span>
+                     </h4>
+                     <ul class="list-group mb-3 checkout_cart_items" style="max-height:272px; overflow-x: hidden;">
+                        <!-- <li class="list-group-item d-flex justify-content-between lh-sm">
+                           <div>
+                              <h6 class="my-0">Product name</h6>
+                              <small class="text-muted">Brief description</small>
+                           </div>
+                           <span class="text-muted">$12</span>
+                        </li> -->
+
+
+                     </ul>
+
+                     <ul class="list-group mb-3">
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                           <div class="text-success">
+                              <h6 class="my-0">Promo code</h6>
+                              <small>EXAMPLECODE</small>
+                           </div>
+                           <span class="text-success">−$5</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                           <span>Total (USD)</span>
+                           <strong class="checkout_cart_total_price"></strong>
+                        </li>
+                     </ul>
+
+                     <form class="promotion_form">
+                        <div class="input-group">
+                           <input name="promo_code" type="text" class="form-control" placeholder="Promo code">
+                           <button type="submit" class="btn btn-secondary">Redeem</button>
+                        </div>
+                     </form>
+                  </div>
+                  <div class="col-md-7 col-lg-8">
+                     <h4 class="mb-3">Billing address</h4>
+                     <form class="needs-validation checkout_form">
+                        <div class="row g-3">
+                           <div class="col-sm-6">
+                              <label for="firstName" class="form-label">First name</label>
+                              <input name="firstName" type="text" class="form-control" id="firstName" placeholder=""
+                                 value="Nir"
+                                 required>
+                              <div class="invalid-feedback">
+                                 Valid first name is required.
+                              </div>
+                           </div>
+
+                           <div class="col-sm-6">
+                              <label for="lastName" class="form-label">Last name</label>
+                              <input name="lastName" type="text" class="form-control" id="lastName" placeholder=""
+                                 value="Yakobov"
+                                 required>
+                              <div class="invalid-feedback">
+                                 Valid last name is required.
+                              </div>
+                           </div>
+
+                           <div class="col-12">
+                              <label for="email" class="form-label">Email <span
+                                    class="text-muted"></span></label>
+                              <input name="email" type="email" class="form-control" id="email"
+                                 placeholder="you@example.com"
+                                 value="you@example.com" required>
+                              <div class="invalid-feedback">
+                                 Please enter a valid email address for shipping updates.
+                              </div>
+                           </div>
+
+                           <div class="col-12">
+                              <label for="address" class="form-label">Address</label>
+                              <input name="address" type="text" class="form-control" id="address"
+                                 placeholder="1234 Main St"
+                                 value="King Jorge"
+                                 required>
+                              <div class="invalid-feedback">
+                                 Please enter your shipping address.
+                              </div>
+                           </div>
+
+                           <div class="col-md-5">
+                              <label for="country" class="form-label">Country</label>
+                              <input name="country" type="text" class="form-control" id="country" placeholder="Country"
+                                 value="Israel"
+                                 required>
+                              <div class="invalid-feedback">
+                                 Please select a valid country.
+                              </div>
+                           </div>
+
+                           <div class="col-md-4">
+                              <label for="state" class="form-label">State</label>
+                              <input name="state" type="text" class="form-control" id="state" placeholder="State"
+                                 value="Jerusalem"
+                                 required>
+                              <div class="invalid-feedback">
+                                 Please provide a valid state.
+                              </div>
+                           </div>
+
+                           <div class="col-md-3">
+                              <label for="zip" class="form-label">Zip</label>
+                              <input name="zip" type="text" class="form-control" id="zip" placeholder="" required
+                                 value="534534">
+                              <div class="invalid-feedback">
+                                 Zip code required.
+                              </div>
+                           </div>
+                        </div>
+
+                        <span class="mt-2"></span>
+
+                        <h4 class="mb-3 mt-3">Payment</h4>
+
+                        <!-- <div class="my-3">
+                           <div class="form-check">
+                              <input value="creditCard" id="credit" name="paymentMethod" type="radio"
+                                 class="form-check-input" checked
+                                 required>
+                              <label class="form-check-label" for="credit">Credit card</label>
+                           </div>
+                           <div class="form-check">
+                              <input id="bitcoin" name="paymentMethod" type="radio" class="form-check-input" required>
+                              <label class="form-check-label" for="bitcoin">Bitcoin</label>
+                           </div>
+                           <div class="form-check">
+                              <input value="paypal" id="paypal" name="paymentMethod" type="radio"
+                                 class="form-check-input" required>
+                              <label class="form-check-label" for="paypal">PayPal</label>
+                           </div>
+                        </div> -->
+
+                        <div class="row gy-3">
+                           <div class="col-md-6">
+                              <label for="cc-name" class="form-label">Name on card</label>
+                              <input type="text" class="form-control" id="cc-name" placeholder="" required
+                                 value="nir yakobov">
+                              <small class="text-muted">Full name as displayed on card</small>
+                              <div class="invalid-feedback">
+                                 Name on card is required
+                              </div>
+                           </div>
+
+                           <div class="col-md-6">
+                              <label for="cc-number" class="form-label">Credit card number</label>
+                              <input type="text" class="form-control" id="cc-number" placeholder="" required
+                                 value="423423423423432423">
+                              <div class="invalid-feedback">
+                                 Credit card number is required
+                              </div>
+                           </div>
+
+                           <div class="col-md-3">
+                              <label for="cc-expiration" class="form-label">Expiration</label>
+                              <input type="text" class="form-control" id="cc-expiration" placeholder="" required
+                                 value="4234">
+                              <div class="invalid-feedback">
+                                 Expiration date required
+                              </div>
+                           </div>
+
+                           <div class="col-md-3">
+                              <label for="cc-cvv" class="form-label">CVV</label>
+                              <input type="text" class="form-control" id="cc-cvv" placeholder="" required value="555">
+                              <div class="invalid-feedback">
+                                 Security code required
+                              </div>
+                           </div>
+                        </div>
+
+                        <span class="mt-2"></span>
+
+                        <button class="w-100 btn btn-primary mt-3" type="submit" data-bs-dismiss="modal">Continue to
+                           checkout</button>
+                     </form>
+                  </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+</body>
+
+</html>
